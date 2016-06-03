@@ -7,6 +7,7 @@ import {Mongo} from 'meteor/mongo';
 import { DisplayName } from '../../../pipes/pipes.ts';
 import {Menu, MenuItem} from 'primeng/primeng';
 import { RouterLink }  from '@angular/router-deprecated';
+import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
 @Component({
   moduleId: module.id,
@@ -14,7 +15,7 @@ import { RouterLink }  from '@angular/router-deprecated';
   templateUrl: 'users-list.html',
   styleUrls: ['users-lists.scss'],
   directives: [MATERIAL_DIRECTIVES, MdToolbar, Menu, RouterLink],
-  pipes: [ DisplayName ]
+  pipes: [ DisplayName, TranslatePipe ]
 })
 export class UsersList extends MeteorComponent {
 

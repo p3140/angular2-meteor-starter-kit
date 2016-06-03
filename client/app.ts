@@ -5,7 +5,7 @@ import {MATERIAL_PROVIDERS, MATERIAL_DIRECTIVES} from 'ng2-material';
 import 'primeui/primeui-ng-all.min.js';
 import {MdToolbar} from '@angular2-material/toolbar';
 import {MeteorComponent} from 'angular2-meteor';
-import {TRANSLATE_PROVIDERS, TranslateService, TranslatePipe, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
+import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
 import { Component, provide } from '@angular/core';
 import { bootstrap } from 'angular2-meteor-auto-bootstrap';
 import { ROUTER_PROVIDERS, ROUTER_DIRECTIVES, RouteConfig } from '@angular/router-deprecated';
@@ -30,7 +30,7 @@ import {Recover} from './imports/auth/recover.ts';
   selector: 'app',
   templateUrl: 'client/app.html',
   directives: [ROUTER_DIRECTIVES, LoginButtons, MATERIAL_DIRECTIVES, MdToolbar, RouterLink],
-  pipes: [DisplayName, TranslatePipe]
+  pipes: [DisplayName]
 })
 @RouteConfig([
   { path: '/admin/...', as: 'AdminPanel', component: AdminPanel, useAsDefault: true },
@@ -67,7 +67,7 @@ bootstrap(Socially,
             HTTP_PROVIDERS, 
             provide(TranslateLoader, 
                     {
-                       useFactory: (http: Http) => new TranslateStaticLoader(http, './assets/i18n', '.json'),
+                       useFactory: (http: Http) => new TranslateStaticLoader(http, '/client/assets/i18n', '.html'),
                        deps: [Http]
                     }
                   ),
