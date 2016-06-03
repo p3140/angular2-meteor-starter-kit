@@ -45,13 +45,17 @@ import {Recover} from './imports/auth/recover.ts';
 class Socially extends MeteorComponent {
   user: Meteor.User;
   param: string = "world";
-  constructor(translate: TranslateService) {
+  constructor(public translate: TranslateService) {
     super();
     var userLang = navigator.language.split('-')[0]; // use navigator lang if available
-    userLang = /(fr|en)/gi.test(userLang) ? userLang : 'en';
+    userLang = /(es|en)/gi.test(userLang) ? userLang : 'en';
 
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     translate.use(userLang);
+  }
+  switchLang(userLang){
+    userLang = /(es|en)/gi.test(userLang) ? userLang : 'en';
+    this.translate.use(userLang);
   }
 
   logout() {

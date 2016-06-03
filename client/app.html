@@ -1,7 +1,21 @@
+<style>
+  .flag-icon-container {
+    margin: 5px;
+  }
+
+ .flag-icon {
+    width: 15px;
+  }
+</style>
+
 <md-toolbar color="primary">
   <h2>
     <a ui-sref="parties"><span class="md-title">Angular2-Meteor Starter Kit</span></a>
   </h2>
+  <div class="flag-icon-container">
+    <span (click)="switchLang('en')" class="flag-icon flag-icon-gb"></span>
+    <span (click)="switchLang('es')" class="flag-icon flag-icon-es"></span>
+  </div>
   <span flex></span>
   <div class="navbar-right navbar-text">
     <div [hidden]="user">

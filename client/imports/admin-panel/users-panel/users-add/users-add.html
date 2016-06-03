@@ -13,6 +13,13 @@
     -webkit-font-feature-settings: 'liga';
     -webkit-font-smoothing: antialiased;
 }
+
+.md-inline-form {
+  margin: 24px;
+}
+.demo-full-width {
+  width: 100%;
+}
 </style>
 <md-toolbar>
     <button [routerLink]="['/AdminPanel/Users']" md-fab class="md-mini md-primary" aria-label="go back!">
@@ -26,27 +33,47 @@
         <h2 class="md-title ma-name" style="">
         	{{ 'Invite User' | translate }}
         </h2>
-        <div layout="row">
 
-            <div layout="row" layout-align="end end" style="width:100%;">
-				<md-input [(ngModel)]="user.name" style="width:90%;" placeholder="Name...">
-				</md-input>
-            </div>
-            <br>
-            <div layout="row" layout-align="end end" style="width:100%;">
-				<md-input [(ngModel)]="user.role" style="width:90%;" placeholder="Role...">
-				</md-input>
-            </div>
-            <br>
-            <div layout="row" layout-align="end end" style="width:100%;">
-				<md-input [(ngModel)]="user.email" style="width:90%;" placeholder="E-mail...">
-				</md-input>
-				<button [routerLink]="['/AdminPanel/Users']" md-fab class="md-mini md-primary" aria-label="go back!" style="width:50px; height:50px;">
-				  <i class="fa fa-send-o custom-icon"></i>
-				</button>
-            </div>
-
+        <div layout="column" class="md-inline-form">
+            <form>
+                <md-input class="demo-full-width" placeholder="{{'Company' | translate}} ({{'disabled' | translate}})" disabled value="Google">
+                </md-input>
+                <table style="width: 100%" cellspacing="0">
+                    <tr>
+                        <td>
+                            <md-input placeholder="{{'First name' | translate}}" style="width: 100%"></md-input>
+                        </td>
+                        <td>
+                            <md-input placeholder="{{'Last name' | translate}}" 
+                                style="width: 100%">
+                            </md-input>
+                        </td>
+                    </tr>
+                </table>
+                <p>
+                <md-input class="demo-full-width" placeholder="E-mail"></md-input>
+                <md-input class="demo-full-width" placeholder="{{'Phone number' | translate}}"></md-input>
+                <md-input class="demo-full-width" placeholder="{{'Address' | translate}}" value="1600 Amphitheatre Pkway"></md-input>
+                <md-input class="demo-full-width" placeholder="{{'Address' | translate}} 2"></md-input>
+                </p>
+                <table style="width: 100%" cellspacing="0">
+                    <tr>
+                        <td><md-input class="demo-full-width" placeholder="{{'City' | translate}}"></md-input></td>
+                        <td><md-input class="demo-full-width" placeholder="{{'State' | translate}}"></md-input></td>
+                        <td>
+                            <md-input #postalCode class="demo-full-width" maxLength="5"
+                            placeholder="{{'Postal Code' | translate}}"
+                            value="94043">
+                                <md-hint align="end">
+                                    {{postalCode.characterCount}} / 5
+                                </md-hint>
+                            </md-input>
+                        </td>
+                    </tr>
+                </table>
+            </form>
         </div>
+
     </md-card-content>
 </md-card>
 
