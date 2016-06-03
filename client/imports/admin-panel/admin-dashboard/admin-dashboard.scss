@@ -1,0 +1,32 @@
+.ma-admin-dashboard {
+  .users-sum {
+    float: left;
+    width: 100px;
+    text-align: center;
+    .users-amount {
+      font-size: 24px;
+    }
+    .users-role {
+      font-size: 13px;
+      color: #aaa;
+    }
+  }
+
+  .ma-party {
+    .party-image {
+      background-size: cover;
+      width: 100%;
+      height: 200px;
+    }
+
+    .ma-name {
+      a {
+        text-decoration: none;
+        color: #333;
+      }
+    }
+    .ma-description {
+
+    }
+  }
+}

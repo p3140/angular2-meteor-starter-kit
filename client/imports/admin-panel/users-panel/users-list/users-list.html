@@ -1,0 +1,31 @@
+<base href="/">
+<md-toolbar *ngIf="!selection" style="background-color:#ddd;" >Users</md-toolbar>
+
+<md-toolbar style="background-color:#ddd;" *ngIf="selection">
+    <span>{{count}} user{{count > 1 ? 's' : ''}} selected{{count > 1 ? 's' : ''}}</span>
+    <span flex hide show-gt-md></span>
+    <span class="md-caption" hide show-gt-md>{{selection}}</span>
+</md-toolbar>
+<div style="background-color: whitesmoke; height: 50px; padding-top:5px; width:100%;">
+    <button [routerLink]="['/AdminPanel/Users/Add']" md-fab class="md-mini md-primary" aria-label="Use Android">
+      <i md-icon>plus_one</i>
+    </button>
+
+    <button *ngIf="selection" md-fab class="md-mini md-primary" aria-label="Delete selected users">
+      <i md-icon>delete_forever</i>
+    </button>
+</div>
+<md-data-table *ngIf="users != undefined" layout-fill [selectable]="true" (onSelectableChange)="change($event)">
+    <thead>
+        <tr md-data-table-header-selectable-row>
+        <th style="width:30px; max-width: 50px;">id</th>
+        <th class="md-text-cell">User</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let user of users" md-data-table-selectable-row [selectable-value]="user._id">
+            <td>{{ user._id }}</td>
+            <td class="md-text-cell">{{ user | displayName }}</td>
+        </tr>
+    </tbody>
+</md-data-table>
