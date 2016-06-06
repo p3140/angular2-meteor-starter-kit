@@ -35,7 +35,7 @@ export class Signup extends MeteorComponent {
           this.error = err;
         }
         else {
-          this.router.navigate(['/PartiesList']);
+          this.router.navigate(['/AdminPanel/Dashboard']);
         }
       });
     }

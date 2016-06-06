@@ -35,33 +35,33 @@
         </h2>
 
         <div layout="column" class="md-inline-form">
-            <form>
-                <md-input class="demo-full-width" placeholder="{{'Company' | translate}} ({{'disabled' | translate}})" disabled value="Google">
+            <form [ngFormModel]="inviteUserForm" #f="ngForm" (submit)="inviteUser(f.value)">
+                <md-input ngControl="company" class="demo-full-width" placeholder="{{'Company' | translate}} ({{'disabled' | translate}})" disabled>
                 </md-input>
                 <table style="width: 100%" cellspacing="0">
                     <tr>
                         <td>
-                            <md-input placeholder="{{'First name' | translate}}" style="width: 100%"></md-input>
+                            <md-input ngControl="name" placeholder="{{'First name' | translate}}" style="width: 100%"></md-input>
                         </td>
                         <td>
-                            <md-input placeholder="{{'Last name' | translate}}" 
+                            <md-input ngControl="last_name" placeholder="{{'Last name' | translate}}" 
                                 style="width: 100%">
                             </md-input>
                         </td>
                     </tr>
                 </table>
                 <p>
-                <md-input class="demo-full-width" placeholder="E-mail"></md-input>
-                <md-input class="demo-full-width" placeholder="{{'Phone number' | translate}}"></md-input>
-                <md-input class="demo-full-width" placeholder="{{'Address' | translate}}" value="1600 Amphitheatre Pkway"></md-input>
-                <md-input class="demo-full-width" placeholder="{{'Address' | translate}} 2"></md-input>
+                <md-input class="demo-full-width" ngControl="email" placeholder="E-mail"></md-input>
+                <md-input class="demo-full-width" ngControl="role" placeholder="{{'Role' | translate}}"></md-input>
+                <md-input class="demo-full-width" ngControl="phone" placeholder="{{'Phone number' | translate}}"></md-input>
+                <md-input class="demo-full-width" ngControl="address" placeholder="{{'Address' | translate}}" value="1600 Amphitheatre Pkway"></md-input>
                 </p>
                 <table style="width: 100%" cellspacing="0">
                     <tr>
-                        <td><md-input class="demo-full-width" placeholder="{{'City' | translate}}"></md-input></td>
-                        <td><md-input class="demo-full-width" placeholder="{{'State' | translate}}"></md-input></td>
+                        <td><md-input class="demo-full-width" ngControl="city" placeholder="{{'City' | translate}}"></md-input></td>
+                        <td><md-input class="demo-full-width" ngControl="state" placeholder="{{'State' | translate}}"></md-input></td>
                         <td>
-                            <md-input #postalCode class="demo-full-width" maxLength="5"
+                            <md-input #postalCode class="demo-full-width" maxLength="5" ngControl="postal_code"
                             placeholder="{{'Postal Code' | translate}}"
                             value="94043">
                                 <md-hint align="end">
@@ -71,6 +71,7 @@
                         </td>
                     </tr>
                 </table>
+                 <button md-raised-button class="md-raised md-primary" type="submit"><i class="fa fa-send-o"></i> {{ 'Send invitation' | translate}}</button>
             </form>
         </div>
 
