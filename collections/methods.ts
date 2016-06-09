@@ -1,7 +1,9 @@
 import {Parties} from './parties.ts';
+import {Invitations} from './invitations.ts';
 import {Email} from 'meteor/email';
 import {check} from 'meteor/check';
 import {Meteor} from 'meteor/meteor';
+import { Random } from 'meteor/random';
 
 function getContactEmail(user:Meteor.User):string {
   if (user.emails && user.emails.length)
@@ -11,38 +13,67 @@ function getContactEmail(user:Meteor.User):string {
 }
 
 Meteor.methods({
-  invite: function (partyId:string, userId:string) {
-    check(partyId, String);
-    check(userId, String);
+  deleteUsers: function(options: any){
+    console.log(options.users);
+    options.users.forEach((user:any)=>{
+      let r = Meteor.users.remove({_id: user});
+      console.log(r);
+    });
+  },
+  invite: function (user: Invitation) {
+    // check(partyId, String);
+    // check(userId, String);
 
-    let party = Parties.findOne(partyId);
+    // let party = Parties.findOne(partyId);
 
-    if (!party)
-      throw new Meteor.Error('404', 'No such party!');
+    // if (!party)
+    //   throw new Meteor.Error('404', 'No such party!');
 
-    if (party.public)
-      throw new Meteor.Error('400', 'That party is public. No need to invite people.');
+    // if (party.public)
+    //   throw new Meteor.Error('400', 'That party is public. No need to invite people.');
 
-    if (party.owner !== this.userId)
-      throw new Meteor.Error('403', 'No permissions!');
+    // if (party.owner !== this.userId)
+    //   throw new Meteor.Error('403', 'No permissions!');
 
-    if (userId !== party.owner && (party.invited || []).indexOf(userId) == -1) {
-      Parties.update(partyId, {$addToSet: {invited: userId}});
+      // Parties.update(partyId, {$addToSet: {invited: userId}});
+      let token = Random.hexString( 16 );
+      let message = {
+        subject: "Invitation",
+        text: `Hi, I just invited you to be an user in my brand new app!.
+                        \n\nCome check it out: ${Meteor.absoluteUrl()}acceptinvitation/${token}\n`
+      };
 
-      let from = getContactEmail(Meteor.users.findOne(this.userId));
-      let to = getContactEmail(Meteor.users.findOne(userId));
-
+      Invitations.insert({
+      // company: ['', Validators.required],
+      company: user.company,
+      name: user.name,
+      last_name: user.last_name,
+      email: user.email,
+      role: user.role,
+      phone: user.phone,
+      address: user.address,
+      city: user.city,
+      state: user.state,
+      postal_code: user.postal_code,
+      token: token,
+      invitation_date: user.invitation_date,
+      message: message,
+      invited_by: Meteor.userId
+    });
+      let _from = "your@e.mail";
+      let to = user.email;
+      
+      // console.log(to, Meteor.isServer, user, token);
       if (Meteor.isServer && to) {
         Email.send({
-          from: 'noreply@socially.com',
+          from: _from,
           to: to,
-          replyTo: from || undefined,
-          subject: 'PARTY: ' + party.name,
-          text: `Hi, I just invited you to ${party.name} on Socially.
-                        \n\nCome check it out: ${Meteor.absoluteUrl()}\n`
+          replyTo: _from || undefined,
+          subject: message.subject,
+          text: message.text
         });
+        // console.log(token);
       }
-    }
   },
   reply: function(partyId: string, rsvp: string) {
     check(partyId, String);

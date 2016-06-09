@@ -1,7 +1,7 @@
 import {Mongo} from 'meteor/mongo';
 import {Meteor} from 'meteor/meteor';
 
-export let InvitationsSchema = new Mongo.Collection<Object>('invitations');
+export let Invitations = new Mongo.Collection<Invitation>('invitations');
 // let InvitationsSchema = new SimpleSchema({
 //   email: {
 //     type: String,
@@ -20,14 +20,20 @@ export let InvitationsSchema = new Mongo.Collection<Object>('invitations');
 //     label: "Invitation Date"
 //   }
 // });
-InvitationsSchema.allow({
-  insert: function(){
-    return false;
+Invitations.allow({
+  insert: function() {
+    let user = Meteor.user();
+    
+    return !!user;
   },
-  update: function(){
-    return false;
+  update: function() {
+    let user = Meteor.user();
+    
+    return !!user;
   },
-  remove: function(){
-    return false;
+  remove: function() {
+    let user = Meteor.user();
+    
+    return !!user;
   }
 });

@@ -1,0 +1,90 @@
+<style>
+.custom-icon {
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
+
+.md-inline-form {
+  margin: 24px;
+}
+.demo-full-width {
+  width: 100%;
+}
+</style>
+<md-card>
+    <md-card-content>
+        <h2 class="md-title ma-name" style="">
+        	<div *ngIf="invitation != undefined">{{ 'Accept invitation' | translate }}</div>
+            <div *ngIf="invitation == undefined">{{'Invitation not found' | translate}}</div>
+        </h2>
+        <div *ngIf="invitation == undefined">{{'Invitation not found' | translate}}</div>
+        <div layout="column" class="md-inline-form" *ngIf="invitation !=undefined">
+            <form [ngFormModel]="acceptInvitationForm" #f="ngForm" (submit)="acceptInvitation(f.value)">
+                <md-input ngControl="company" class="demo-full-width" placeholder="{{'Company' | translate}} ({{'disabled' | translate}})" disabled [(ngModel)]="invitation.company">
+                </md-input>
+                <table style="width: 100%" cellspacing="0">
+                    <tr>
+                        <td>
+                            <md-input ngControl="name" placeholder="{{'First name' | translate}}" style="width: 100%" [(ngModel)]="invitation.name">
+                                
+                            </md-input>
+                        </td>
+                        <td>
+                            <md-input ngControl="last_name" placeholder="{{'Last name' | translate}}" 
+                                style="width: 100%" [(ngModel)]="invitation.last_name">
+                            </md-input>
+                        </td>
+                    </tr>
+                </table>
+                <p>
+                <md-input class="demo-full-width" ngControl="email" placeholder="E-mail" [(ngModel)]="invitation.email"></md-input>
+                <md-input class="demo-full-width" ngControl="role" placeholder="{{'Role' | translate}}" 
+                [(ngModel)]="invitation.role">
+                    
+                </md-input>
+                <md-input class="demo-full-width" ngControl="phone" placeholder="{{'Phone number' | translate}}" 
+                [(ngModel)]="invitation.phone">
+                    
+                </md-input>
+                <md-input class="demo-full-width" ngControl="address" placeholder="{{'Address' | translate}}" value="1600 Amphitheatre Pkway" [(ngModel)]="invitation.address"></md-input>
+                </p>
+                <table style="width: 100%" cellspacing="0">
+                    <tr>
+                        <td>
+                            <md-input class="demo-full-width" ngControl="city" placeholder="{{'City' | translate}}"
+                             [(ngModel)]="invitation.city">
+                            </md-input>
+                        </td>
+                        <td>
+                            <md-input class="demo-full-width" ngControl="state" placeholder="{{'State' | translate}}"
+                             [(ngModel)]="invitation.state">
+                            </md-input>
+                        </td>
+                        <td>
+                            <md-input #postalCode class="demo-full-width" maxLength="5" ngControl="postal_code"
+                            placeholder="{{'Postal Code' | translate}}"
+                            value="94043" [(ngModel)]="invitation.postal_code">
+                                <md-hint align="end">
+                                    {{postalCode.characterCount}} / 5
+                                </md-hint>
+                            </md-input>
+                        </td>
+                    </tr>
+                </table>
+                 <button md-raised-button class="md-raised md-primary" type="submit"><i class="fa fa-check"></i> {{ 'Register' | translate}}</button>
+            </form>
+        </div>
+
+    </md-card-content>
+</md-card>
+

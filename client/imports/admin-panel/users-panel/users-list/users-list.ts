@@ -23,6 +23,7 @@ export class UsersList extends MeteorComponent {
   count: number;
   users: Mongo.Cursor<Object>;
   private items: MenuItem[];
+  selectedUsers: any;
   
   constructor(){
     super();
@@ -31,6 +32,10 @@ export class UsersList extends MeteorComponent {
           this.users = Meteor.users.find({});
         });
     });
+  }
+
+  deleteUsers(){
+    this.call('deleteUsers', {users:this.selectedUsers});
   }
 
     ngOnInit(){
@@ -42,14 +47,17 @@ export class UsersList extends MeteorComponent {
         ]
       }];
     }
-
+    
    change(data: ITableSelectionChange) {
     let names = [];
+    let _ids = [];
     this.users.forEach((user: any) => {
       if (data.values.indexOf(user._id) !== -1) {
         names.push(user.emails[0].address);
+        _ids.push(user._id);
       }
     });
+    this.selectedUsers = _ids;
     this.selection = names.join(', ');
     this.count = names.length;
   }

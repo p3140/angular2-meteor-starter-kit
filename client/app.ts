@@ -23,8 +23,8 @@ import {InjectUser} from 'angular2-meteor-accounts-ui';
 import {Login} from './imports/auth/login.ts';
 import {Signup} from './imports/auth/signup.ts';
 import {Recover} from './imports/auth/recover.ts';
-
-
+import {AcceptInvitation} from './imports/accept-invitation/accept-invitation.ts';
+import {appInjector} from './imports/auth/app-injector';
 
 @Component({
   selector: 'app',
@@ -38,23 +38,49 @@ import {Recover} from './imports/auth/recover.ts';
   { path: '/party/:partyId', as: 'PartyDetails', component: PartyDetails },
   { path: '/login', as: 'Login', component: Login },
   { path: '/signup', as: 'Signup', component: Signup },
+  { path: '/acceptinvitation/:token', as: 'AcceptInvitation', component: AcceptInvitation },
   { path: '/recover', as: 'Recover', component: Recover },
   { path: '/**', redirectTo: ['AdminPanel/Dashboard'] }
 ])
-@InjectUser()
+@InjectUser('')
 class Socially extends MeteorComponent {
-  user: Meteor.User;
   param: string = "world";
+  currentUser: Meteor.User;
   constructor(public translate: TranslateService) {
     super();
-    var userLang = navigator.language.split('-')[0]; // use navigator lang if available
-    userLang = /(es|en)/gi.test(userLang) ? userLang : 'en';
+    this.subscribe('usersList', () => {
+      this.autorun(() => {
+        this.currentUser = Meteor.user();
+          var userLang = navigator.language.split('-')[0]; // use navigator lang if available
+          // console.log(this.user, this.currentUser, Meteor.User, Meteor.user(), Meteor.userId());
+          userLang = /(es|en)/gi.test(userLang) ? userLang : 'en';
 
-    // the lang to use, if the lang isn't available, it will use the current loader to get them
-    translate.use(userLang);
+          // this.autorun(() => {
+            // console.log(this.currentUser);
+            if(this.currentUser && this.currentUser.profile  && this.currentUser.profile.language){
+              userLang = this.currentUser.profile.language;
+            }
+          // });
+
+          // the lang to use, if the lang isn't available, it will use the current loader to get them
+          this.translate.use(userLang);
+      },   true);
+    });
+
   }
+
   switchLang(userLang){
     userLang = /(es|en)/gi.test(userLang) ? userLang : 'en';
+    let profile = {language: ''};
+    if(this.currentUser.profile == undefined) {
+      profile = {
+        language: userLang
+      }; 
+    } else {
+      profile = this.currentUser.profile;
+      profile.language = userLang;
+    }
+    Meteor.users.update(Meteor.userId(), {$set: {profile: profile}});
     this.translate.use(userLang);
   }
 
@@ -82,4 +108,4 @@ bootstrap(Socially,
             ANGULAR2_GOOGLE_MAPS_PROVIDERS, 
             provide(APP_BASE_HREF, { useValue: '/' })
           ]
-        );
+        ).then((appRef) => appInjector(appRef.injector));

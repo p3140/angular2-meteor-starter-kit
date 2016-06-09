@@ -15,7 +15,7 @@
       <i md-icon>plus_one</i>
     </button>
 
-    <button *ngIf="selection" md-fab class="md-mini md-primary" aria-label="Delete selected users">
+    <button *ngIf="selection" md-fab class="md-mini md-primary" (click)="deleteUsers()" aria-label="Delete selected users">
       <i md-icon>delete_forever</i>
     </button>
 </div>

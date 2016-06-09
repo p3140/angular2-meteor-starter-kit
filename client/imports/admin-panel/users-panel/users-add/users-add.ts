@@ -8,7 +8,6 @@ import {Mongo} from 'meteor/mongo';
 import { RouterLink }  from '@angular/router-deprecated';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
-import { Random } from 'meteor/random';
 
 @Component({
   moduleId: module.id,
@@ -43,15 +42,22 @@ export class UsersAdd extends MeteorComponent {
       city: [''],
       state: [''],
       postal_code: [''],
-      token: Random.hexString( 16 ),
+      // token: Random.hexString( 16 ),
       invitation_date: ['']
     });
   }
-
   inviteUser(user) {
     if (this.inviteUserForm.valid) {
       if (Meteor.userId()) { // needs to validate right permissions
-        console.log(user);
+        // console.log(user);
+        this.call('invite', user, (error) => {
+          if (error) {
+            alert(`Failed to invite due to ${error}`);
+            return;
+          }
+
+          console.log('User successfully invited.');
+        });
         // Invitations.insert(<Object>{
         // company: user.company,
         // name: user.name,
@@ -80,7 +86,7 @@ export class UsersAdd extends MeteorComponent {
         (<Control>this.inviteUserForm.controls['postal_code']).updateValue('');
 
       } else {
-        alert('Please log in to add a party');
+        console.log('Please log in to add a party');
       }
     }
   }
