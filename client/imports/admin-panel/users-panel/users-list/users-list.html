@@ -27,9 +27,11 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let user of users" md-data-table-selectable-row [selectable-value]="user._id">
+        <tr *ngFor="let user of users | paginate:{currentPage: 1, itemsPerPage: pageSize, totalItems: usersSize}" md-data-table-selectable-row [selectable-value]="user._id">
             <td>{{ user._id }}</td>
             <td class="md-text-cell">{{ user | displayName }}</td>
         </tr>
     </tbody>
 </md-data-table>
+
+<pagination-controls (change)="onPageChanged($event.page)"></pagination-controls>

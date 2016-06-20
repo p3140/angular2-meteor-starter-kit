@@ -43,7 +43,7 @@ import {appInjector} from './imports/auth/app-injector';
   { path: '/**', redirectTo: ['AdminPanel/Dashboard'] }
 ])
 @InjectUser('')
-class Socially extends MeteorComponent {
+class App extends MeteorComponent {
   param: string = "world";
   currentUser: Meteor.User;
   constructor(public translate: TranslateService) {
@@ -91,7 +91,7 @@ class Socially extends MeteorComponent {
   }
 }
 
-bootstrap(Socially, 
+bootstrap(App, 
           [
             TRANSLATE_PROVIDERS, 
             HTTP_PROVIDERS, 

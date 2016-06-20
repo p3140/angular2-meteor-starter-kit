@@ -8,34 +8,61 @@ import { DisplayName } from '../../../pipes/pipes.ts';
 import {Menu, MenuItem} from 'primeng/primeng';
 import { RouterLink }  from '@angular/router-deprecated';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
+import { PaginationService, PaginatePipe, PaginationControlsCmp } from 'angular2-pagination';
+import { Counts } from 'meteor/tmeasday:publish-counts';
 
 @Component({
   moduleId: module.id,
   selector: 'users-list',
   templateUrl: 'users-list.html',
   styleUrls: ['users-lists.scss'],
-  directives: [MATERIAL_DIRECTIVES, MdToolbar, Menu, RouterLink],
-  pipes: [ DisplayName, TranslatePipe ]
+  viewProviders: [PaginationService],
+  directives: [MATERIAL_DIRECTIVES, MdToolbar, Menu, RouterLink, PaginationControlsCmp],
+  pipes: [ DisplayName, TranslatePipe, PaginatePipe ]
 })
 export class UsersList extends MeteorComponent {
 
   selection: string;
   count: number;
   users: Mongo.Cursor<Object>;
+  pageSize: number = 10;
+  curPage: ReactiveVar<number> = new ReactiveVar<number>(1);
+  emailOrder: ReactiveVar<number> = new ReactiveVar<number>(1);
+  email: ReactiveVar<string> = new ReactiveVar<string>(null);
   private items: MenuItem[];
   selectedUsers: any;
+  usersSize: number = 0;
   
   constructor(){
     super();
     this.autorun(() => {
-    this.subscribe('usersList',{}, ()=>{
-          this.users = Meteor.users.find({});
-        });
-    });
+      let options = {
+        limit: this.pageSize,
+        skip: (this.curPage.get() - 1) * this.pageSize,
+        // sort: { 'emails.address': this.emailOrder.get() }
+      };
+      this.subscribe('usersList2',options, this.email.get(), ()=>{
+            this.users = Meteor.users.find({}/*, {sort:{'emails.address': this.emailOrder.get()}}*/);
+            console.log(this.users);
+          });
+    }, true);
+
+    this.autorun(() => {
+      this.usersSize = Counts.get('numberOfUsers');
+      console.log(this.usersSize);
+    }, true);
+
+  }
+
+  onPageChanged(page: number) {
+    this.curPage.set(page);
   }
 
   deleteUsers(){
     this.call('deleteUsers', {users:this.selectedUsers});
+    this.selectedUsers = [];
+    this.selection = "";
+    this.count = 0;
   }
 
     ngOnInit(){

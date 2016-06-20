@@ -1,36 +1,28 @@
-import {Parties} from '../collections/parties.ts';
 import { Meteor } from 'meteor/meteor';
 import {Counts} from 'meteor/tmeasday:publish-counts';
 
-Meteor.publish('uninvited', function (partyId:string) {
-  let party = Parties.findOne(partyId);
+function buildQuery(userId: string, email: string): Object {
+  var isActive = {
+    // $or: [
+    //   { 'profile.active': true }
+    // ]
+  };
 
-  if (!party)
-    throw new Meteor.Error('404', 'No such party!');
+  if (userId) {
+    return { $and: [{ _id: userId }] };
+  }
 
-  return Meteor.users.find({
-    _id: {
-      $nin: party.invited || [],
-      $ne: this.userId
-    }
-  });
-});
+  let searchRegEx = { '$regex': '.*' + (email || '') + '.*', '$options': 'i' };
 
-// Meteor.publish("userList", function() {
+  return { $and: [{ 'emails.address': searchRegEx }] };
+}
+Meteor.publish('usersList2', function(options: Object, email: string) {
+  // if(options != undefined){
+  console.log("?", options);
+  let _op = options;
 
-//     var user = Meteor.users.findOne({
-//         _id: this.userId
-//     });
-
-
-//     if (true){//Roles.userIsInRole(user, ["admin"])) {
-//         return Meteor.users.find({});
-//     }
-//     return false;
-// });
-
-Meteor.publish('usersList', function(options: Object) {
-  Counts.publish(this, 'numberOfUsers',
-     Meteor.users.find({}), { noReady: true });
-  return Meteor.users.find({}, options);
+    Counts.publish(this, 'numberOfUsers',
+       Meteor.users.find(buildQuery.call(this,null, email)), { noReady: true });
+    return Meteor.users.find(buildQuery.call(this, null, email), _op);
+  // }
 });

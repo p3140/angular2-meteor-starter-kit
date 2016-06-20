@@ -1,7 +1,7 @@
-import {loadParties} from './load-parties.ts';
+import {loadUsers} from './load-users.ts';
 import {Meteor} from 'meteor/meteor';
 import './parties.ts';
 import './users.ts';
 import '../collections/methods.ts';
 
-Meteor.startup(loadParties);
+Meteor.startup(loadUsers);

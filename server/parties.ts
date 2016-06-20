@@ -31,6 +31,7 @@ function buildQuery(partyId: string, location: string): Object {
 }
 
 Meteor.publish('parties', function(options: Object, location: string) {
+  console.log(options);
   Counts.publish(this, 'numberOfParties',
     Parties.find(buildQuery.call(this, null, location)), { noReady: true });
   return Parties.find(buildQuery.call(this, null, location), options);

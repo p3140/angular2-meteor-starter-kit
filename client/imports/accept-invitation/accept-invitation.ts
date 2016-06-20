@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, ControlGroup, Validators, Control } from '@angular/common';
-import { RouteParams, RouterLink } from '@angular/router-deprecated';
+import { RouteParams, RouterLink, Router } from '@angular/router-deprecated';
 import {Invitations} from '../../../collections/invitations.ts';
 import { Meteor } from 'meteor/meteor';
 import { RequireUser, InjectUser } from 'angular2-meteor-accounts-ui';
@@ -21,7 +21,7 @@ export class AcceptInvitation extends MeteorComponent {
   invitation: Mongo.Cursor<Invitation>;
   acceptInvitationForm: ControlGroup;
 
-  constructor(params: RouteParams) {
+  constructor(params: RouteParams, private router: Router) {
     super();
     let fb = new FormBuilder();
     var token = params.get('token');
@@ -46,7 +46,33 @@ export class AcceptInvitation extends MeteorComponent {
       state: [''],
       postal_code: [''],
       token: Random.hexString( 16 ),
-      invitation_date: ['']
+      invitation_date: [''],
+      password: ['']
     });
+  }
+
+  acceptInvitation(user){
+    console.log(user);
+    let profile = {
+      company: user.company,
+      name: user.name,
+      last_name: user.last_name,
+      role: user.role,
+      phone: user.phone,
+      address: user.address,
+      city: user.city,
+      state: user.state,
+      postal_code: user.postal_code,
+      token: user.token,
+      invitation_date: user.invitation_date
+    };
+      Accounts.createUser({ email: user.email, password: user.password, profile: profile}, (err) => {
+        if (err) {
+          console.log(err);
+        }
+        else {
+          this.router.navigate(['/AdminPanel/UsersList']);
+        }
+      });
   }
 }
