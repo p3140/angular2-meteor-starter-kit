@@ -19,8 +19,8 @@
       <i md-icon>delete_forever</i>
     </button>
 </div>
-<div *ngIf="loadingUsers">Loading users...</div>
-<md-data-table *ngIf="!loadingUsers" layout-fill [selectable]="true" (onSelectableChange)="change($event)">
+<div *ngIf="loadingUsers == true">{{'Loading' | translate}} {{'users' | translate}}...</div>
+<md-data-table *ngIf="loadingUsers == false" layout-fill [selectable]="true" (onSelectableChange)="change($event)">
     <thead>
         <tr md-data-table-header-selectable-row>
         <th style="width:30px; max-width: 50px;">id</th>

@@ -32,10 +32,11 @@ export class UsersList extends MeteorComponent {
   private items: MenuItem[];
   selectedUsers: any;
   usersSize: number = 0;
-  loadingUsers: any = true;
+  loadingUsers: any = false;
 
   constructor(){
     super();
+    this.loadingUsers = false;
     this.autorun(() => {
       this.loadingUsers = true;
       let options = {
@@ -45,8 +46,8 @@ export class UsersList extends MeteorComponent {
       };
       this.subscribe('users.list',options, this.email.get(), ()=>{
             this.users = Meteor.users.find({}, {sort:{'emails.address': this.emailOrder.get()}});
-            console.log(this.users);
             this.loadingUsers = false;
+            console.log(this.loadingUsers,this.users);
           });
     }, true);
 
