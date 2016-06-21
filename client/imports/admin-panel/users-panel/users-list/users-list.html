@@ -19,7 +19,8 @@
       <i md-icon>delete_forever</i>
     </button>
 </div>
-<md-data-table *ngIf="users != undefined" layout-fill [selectable]="true" (onSelectableChange)="change($event)">
+<div *ngIf="loadingUsers">Loading users...</div>
+<md-data-table *ngIf="!loadingUsers" layout-fill [selectable]="true" (onSelectableChange)="change($event)">
     <thead>
         <tr md-data-table-header-selectable-row>
         <th style="width:30px; max-width: 50px;">id</th>
@@ -27,11 +28,10 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let user of users | paginate:{currentPage: 1, itemsPerPage: pageSize, totalItems: usersSize}" md-data-table-selectable-row [selectable-value]="user._id">
+        <tr *ngFor="let user of users | paginate:{currentPage: curPage.get(), itemsPerPage: pageSize, totalItems: usersSize}" md-data-table-selectable-row [selectable-value]="user._id">
             <td>{{ user._id }}</td>
             <td class="md-text-cell">{{ user | displayName }}</td>
         </tr>
     </tbody>
 </md-data-table>
-
 <pagination-controls (change)="onPageChanged($event.page)"></pagination-controls>

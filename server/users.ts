@@ -16,13 +16,13 @@ function buildQuery(userId: string, email: string): Object {
 
   return { $and: [{ 'emails.address': searchRegEx }] };
 }
-Meteor.publish('usersList2', function(options: Object, email: string) {
+Meteor.publish('users.list', function(options: Object, email: string) {
   // if(options != undefined){
   console.log("?", options);
   let _op = options;
 
     Counts.publish(this, 'numberOfUsers',
-       Meteor.users.find(buildQuery.call(this,null, email)), { noReady: true });
-    return Meteor.users.find(buildQuery.call(this, null, email), _op);
+       Meteor.users.find({}), { noReady: true });
+    return Meteor.users.find({}, _op);
   // }
 });

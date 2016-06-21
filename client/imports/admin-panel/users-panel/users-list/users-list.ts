@@ -32,18 +32,21 @@ export class UsersList extends MeteorComponent {
   private items: MenuItem[];
   selectedUsers: any;
   usersSize: number = 0;
-  
+  loadingUsers: any = true;
+
   constructor(){
     super();
     this.autorun(() => {
+      this.loadingUsers = true;
       let options = {
         limit: this.pageSize,
         skip: (this.curPage.get() - 1) * this.pageSize,
-        // sort: { 'emails.address': this.emailOrder.get() }
+        sort: { 'emails.address': this.emailOrder.get() }
       };
-      this.subscribe('usersList2',options, this.email.get(), ()=>{
-            this.users = Meteor.users.find({}/*, {sort:{'emails.address': this.emailOrder.get()}}*/);
+      this.subscribe('users.list',options, this.email.get(), ()=>{
+            this.users = Meteor.users.find({}, {sort:{'emails.address': this.emailOrder.get()}});
             console.log(this.users);
+            this.loadingUsers = false;
           });
     }, true);
 

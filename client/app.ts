@@ -48,11 +48,11 @@ class App extends MeteorComponent {
   currentUser: Meteor.User;
   constructor(public translate: TranslateService) {
     super();
-    this.subscribe('usersList', () => {
+    // this.subscribe('users.list', () => {
       this.autorun(() => {
         this.currentUser = Meteor.user();
           var userLang = navigator.language.split('-')[0]; // use navigator lang if available
-          // console.log(this.user, this.currentUser, Meteor.User, Meteor.user(), Meteor.userId());
+          // console.log(this.currentUser);
           userLang = /(es|en)/gi.test(userLang) ? userLang : 'en';
 
           // this.autorun(() => {
@@ -65,7 +65,7 @@ class App extends MeteorComponent {
           // the lang to use, if the lang isn't available, it will use the current loader to get them
           this.translate.use(userLang);
       },   true);
-    });
+    // });
 
   }
 
